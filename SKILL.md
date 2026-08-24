@@ -1,9 +1,9 @@
 ---
 name: self-learning-review
-description: 学习陪练 / Vibe Coding 复盘生成器。将一次 AI Coding（Claude Code / Cursor / ChatGPT 等）开发或 Debug 过程转化为结构化学习复盘：时间线还原、5 Whys 根因链、失败尝试记录、AI 协作复盘、行动项与复习计划。当用户说"帮我复盘"、"总结一下开发过程"、"整理这个 bug"、"生成学习记录"，或表示"折腾很久终于解决了"想沉淀经验时使用。
+description: AI Coding 错题本 / 复盘生成器。将一次 AI Coding（Claude Code / Cursor / ChatGPT 等）开发或 Debug 过程转化为结构化学习复盘：时间线还原、5 Whys 根因链、失败尝试记录、AI 协作复盘、行动项与复习计划。当用户说"帮我复盘"、"总结一下开发过程"、"整理这个 bug"、"生成学习记录"、"记个错题"，或表示"折腾很久终于解决了"想沉淀经验时使用。
 ---
 
-# 学习陪练 / Vibe Coding 复盘生成器
+# AI Coding 错题本 / 复盘生成器
 
 ## 定位
 

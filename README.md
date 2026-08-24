@@ -1,52 +1,108 @@
 # self-learning-review
 
-学习陪练 / Vibe Coding 复盘生成器：把一次 AI Coding（Claude Code / Cursor / ChatGPT 等）开发或 Debug 过程，转化为结构化学习复盘——时间线、5 Whys 根因链、失败尝试记录、AI 协作复盘、行动项与复习计划。
+**把过程沉淀成经验。**
 
-核心闭环：**AI Coding → 问题解决 → 自动复盘 → 沉淀经验 → 下次更快解决类似问题。**
+一个 Claude Code Skill：在功能开发完成或 bug 解决之后，自动把开发过程转化为结构化复盘——时间线、5 Whys 根因链、失败尝试、行动项、复习计划。
+
+## 为什么需要它
+
+用 AI 写代码的典型一天：
+
+> 提需求 → AI 给方案 → 报错 → 换个问法 → 又报错 → 终于好了 → 下一个需求
+
+问题不在效率，在于**经验随会话蒸发**：折腾两小时才解决的 bug，三个月后遇到同类的，还是从零开始。
+
+学生时代对付这个问题的办法是错题本：做错的题记下来、定期重看。这个 skill 就是 AI Coding 的错题本——而且不只抄题，还帮你挖根因、留自测题、排复习计划。
+
+## 生成什么
+
+一篇 10 节的 Markdown 复盘（深度模式，默认；另有快速模式的一页卡片）：
+
+| 环节 | 内容 |
+|---|---|
+| 时间线 | 🔵 推进 / 🟡 绕路 / 🔴 卡点——一眼看清时间耗在哪 |
+| 根因链 | 5 Whys 追问到"值得修的那一层"，拒绝"改了就好了" |
+| 尝试记录 | 失败的尝试也入表，弯路同样是资产 |
+| 做得好 | 无责复盘：做对的地方也记下来 |
+| 行动项 | "下次遇到 X，就做 Y"——带触发条件才可执行 |
+| AI 协作复盘 | 你的 Prompt 缺了什么信息，附下次可复用的模板 |
+| 自我检验 | AI 出题留白，你盲答——能讲清楚才算学会 |
+| 复习计划 | 3 天 / 1 周 / 1 个月，按遗忘曲线的节奏重看 |
+
+完整示例见 [examples/example-review.md](examples/example-review.md)。
+
+## 两分钟看个例子
+
+"本地好好的，部署到 Docker 就报 `ModuleNotFoundError`"——复盘后的根因链长这样：
+
+```
+表象：容器内调用 to_excel() 报缺 openpyxl
+为什么 → 镜像里没有安装 openpyxl
+为什么 → requirements.txt 没有声明它，镜像按清单构建
+为什么 → 本地 pip install 后没有同步依赖清单的习惯
+根因：依赖变更只存在于"环境实例"，从未进入"环境定义"
+```
+
+对应的行动项：
+
+| 触发条件 | 动作 |
+|---|---|
+| 下次本地装新包 | 装完立即同步进 requirements.txt |
+| 下次"本地正常、部署报错" | 第一步先对比两端依赖清单，不先装包 |
 
 ## 安装
 
 ### Windows
 
-双击仓库根目录的 `install.bat`。
+双击 `install.bat`。
 
 ### macOS / Linux
-
-终端执行：
 
 ```bash
 bash install.sh
 ```
 
-（macOS 下 .sh 双击默认会用编辑器打开；如需双击运行，先 `chmod +x install.sh` 并在"显示简介 → 打开方式"里设为终端。）
+（macOS 双击 .sh 默认用编辑器打开；要双击运行就先 `chmod +x install.sh`。）
 
 ### 手动安装
 
-把以下内容复制到 `~/.claude/skills/self-learning-review/`（Windows 为 `%USERPROFILE%\.claude\skills\self-learning-review\`），文件夹名必须与 skill 同名：
+把 `SKILL.md`、`templates/`、`examples/`、`references/` 复制到 `~/.claude/skills/self-learning-review/`（Windows 为 `%USERPROFILE%\.claude\skills\self-learning-review\`），文件夹名必须与 skill 同名。
 
-```
-SKILL.md
-templates/    （review-template.md、quick-review-template.md）
-examples/     （example-review.md）
-references/   （methodology.md）
-```
+**更新**：重跑一遍安装脚本即可。检测到已安装会自动进入更新模式并镜像同步——仓库里删掉的文件也会从安装目录清理。脚本本身和 `.git` 不会被复制。
 
-## 更新语义
+## 使用
 
-脚本检测到目标已存在时自动进入"更新"模式：覆盖 `SKILL.md`，并对 `templates/` `examples/` `references/` 做镜像同步——仓库里已删除的文件也会从安装目录清掉。脚本本身和 `.git` 不会被复制。
+新开一个 Claude Code 会话，任选其一：
 
-## 验证
+- 输入 `/self-learning-review`
+- 直接说："帮我复盘一下刚才的开发过程" / "整理一下这个 bug"
 
-新开一个 Claude Code 会话：
+它会：还原时间线 → 挖根因 → 提炼知识 → 生成复盘 → 问你是否保存到 `reviews/` 并登记索引。
 
-- 输入 `/self-learning-review` 手动触发
-- 或直接说"帮我复盘一下刚才的开发过程"，Claude 会按 description 自动加载
+## 和"让 AI 总结一下会话"有什么不同
+
+| 普通会话总结 | self-learning-review |
+|---|---|
+| 总结改了哪些代码 | 总结为什么这么改、下次怎么更快 |
+| AI 替你写结论 | 关键结论留白，你先盲答再对照 |
+| 看完即忘 | 附复习计划，3 天后先自测再看 |
+| 只挑毛病 | 无责复盘，做对的也记录 |
+
+## 设计依据
+
+不是拍脑袋的模板，每个环节都有出处（详见 [references/methodology.md](references/methodology.md)）：
+
+- 无责复盘与行动项 —— Google SRE Postmortem Culture
+- 15 分钟反思胜过多练 15 分钟（绩效提升约 20%）—— Di Stefano 等，HBS
+- 根因链 —— 5 Whys（丰田生产系统）
+- 自测留白 —— 自我解释效应 / 费曼技巧
+- 复习节奏 —— 间隔重复与遗忘曲线
 
 ## 目录结构
 
 ```
 self-learning-review/
-├── SKILL.md                       # 主工作流（155 行）
+├── SKILL.md                       # 主工作流
 ├── install.bat / install.sh       # 安装脚本
 ├── templates/
 │   ├── review-template.md         # 深度复盘模板（10 节）
