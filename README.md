@@ -77,7 +77,25 @@ bash install.sh
 - 输入 `/self-learning-review`
 - 直接说："帮我复盘一下刚才的开发过程" / "整理一下这个 bug"
 
-它会：还原时间线 → 挖根因 → 提炼知识 → 生成复盘 → 问你是否保存到 `reviews/` 并登记索引。
+它会：还原时间线 → 挖根因 → 提炼知识 → 生成复盘 → 问你保存到哪（Obsidian 笔记库或项目 `reviews/`）并登记索引。
+
+## 连入 Obsidian
+
+复盘是带 YAML frontmatter 的标准 Markdown，写进 Obsidian vault 即自动集成（标签检索、勾选框、双向链接图谱），无需插件或 API。
+
+**一次性配置（三步）**：
+
+1. 装 Obsidian 并建好 vault（一个文件夹，比如 `D:\Notes`）
+2. 在 Claude Code 里做第一次复盘，说"存到 Obsidian"——skill 会自动读 Obsidian 配置列出你的 vault 让你选（读不到就让你直接贴路径）
+3. 选完即记下，路径存在 `~/.claude/skills/self-learning-review/config.md`，以后每次复盘自动用、不重选
+
+**换 vault**：编辑那个 `config.md` 改 `vault:` 这行，或在对话里说"换 vault 到 …"。
+
+**复盘落在哪**：`<你的 vault>/AI Coding 错题本/`，每篇一个 `.md`，外加一个 `INDEX.md` 用 `[[双向链接]]` 串起所有复盘——在 Obsidian 关系图谱里能看到它们互相连接。
+
+> 安装脚本升级时只镜像 SKILL.md 和三个子目录，不会动 `config.md`，配置不会丢。
+>
+> 不装 Obsidian 也能用：默认存当前项目 `reviews/`，frontmatter 和 wikilink 仍是合法 Markdown，不影响阅读。
 
 ## 和"让 AI 总结一下会话"有什么不同
 

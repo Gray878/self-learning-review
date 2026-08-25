@@ -1,9 +1,12 @@
+---
+date: YYYY-MM-DD
+tags: []
+---
+
 # Coding Session Review
 
-> 日期：
 > 主题：
 > 项目 / 技术栈：
-> 标签：
 
 ## 1. 任务概览
 

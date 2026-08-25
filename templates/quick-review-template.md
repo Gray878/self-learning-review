@@ -1,6 +1,11 @@
+---
+date: YYYY-MM-DD
+tags: []
+---
+
 # Quick Review
 
-> 日期：　　主题：　　标签：
+> 主题：
 
 - **做了什么**：
 

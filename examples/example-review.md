@@ -1,9 +1,12 @@
+---
+date: 2026-08-24
+tags: [docker, 依赖管理, 部署, 排错]
+---
+
 # Coding Session Review
 
-> 日期：2026-08-24
 > 主题：FastAPI 报表服务新增 Excel 导出 + Docker 部署缺依赖排查
 > 项目 / 技术栈：FastAPI + pandas（openpyxl）+ Docker（python:3.11-slim）
-> 标签：#docker #依赖管理 #部署 #排错
 
 ## 1. 任务概览
 

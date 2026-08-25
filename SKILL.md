@@ -98,8 +98,7 @@ description: AI Coding 错题本 / 复盘生成器。将一次 AI Coding（Claud
 
 读取对应模板，逐节填写：
 
-- 头部信息：日期默认当天，主题一句话概括，技术栈从输入推断（不确定则留空请用户补充）
-- 标签：3-5 个 `#` 标签（技术域 + 问题类型），便于日后检索
+- 头部信息：YAML frontmatter 写 `date`（默认当天）和 `tags`（3-5 个：技术域 + 问题类型）；正文首行主题一句话概括，技术栈从输入推断（不确定则留空请用户补充）
 - 每个问题必须填"下次更早发现的信号"：当时做法合理的条件下，下次什么信号能提前预警
 - 行动项必须是"触发条件 → 动作"格式，可执行、可检查
 - **自我检验节是本 skill 的价值核心**：针对根因和关键概念出 1-2 个问题，留给用户盲答（AI 不要替用户答），并提醒"答完对照第 3、5 节订正"——能自己讲清楚才算学会
@@ -122,10 +121,22 @@ description: AI Coding 错题本 / 复盘生成器。将一次 AI Coding（Claud
 
 ### 8 交付
 
-1. 展示完整 Markdown 给用户
-2. 询问是否保存为文件；用户同意则：
-   - 写入 `reviews/YYYY-MM-DD-<主题>.md`（或用户指定路径）
-   - 在 `reviews/INDEX.md` 追加一行索引：`| 日期 | 主题 | 标签 | [文件](链接) |`（纯文件级轻量实现，不是数据库；INDEX.md 不存在则创建并加表头）
+1. 展示完整 Markdown 给用户，询问保存在哪，按优先级：
+   1. 用户当次指明的路径
+   2. 已配置的 Obsidian vault（见下）
+   3. 默认：当前项目 `reviews/`
+2. Obsidian vault 配置（一次性，持久化）：
+   - 配置文件：`~/.claude/skills/self-learning-review/config.md`（与 SKILL.md 同级；安装更新只镜像 SKILL.md / templates / examples / references，不会动 config.md，故配置不丢）
+   - 已配置：config.md 存在且有 `vault:` 行 → 直接用该路径，`folder:` 行缺省为 `AI Coding 错题本`
+   - 首次配置（用户提到 Obsidian / 笔记库但无 config）：按顺序确定 vault 并写回 config.md：
+     1. 读 `%APPDATA%/obsidian/obsidian.json`（macOS：`~/Library/Application Support/obsidian/obsidian.json`）取 `vaults` 字段
+     2. 一个 vault → 确认后用；多个 → 列出让用户选；读不到 → 请用户直接贴 vault 文件夹路径
+     3. 写入 config.md 两行：`vault: <路径>`、`folder: AI Coding 错题本`
+   - 更换：用户说"换 vault"或原路径已不存在 → 重走首次配置，覆盖 config.md
+3. 保存规则：
+   - 文件名 `YYYY-MM-DD-<主题>.md`，存 vault 时放 `<vault>/<folder>/`
+   - 同目录 `INDEX.md` 追加：`| 日期 | [[YYYY-MM-DD-主题]] | tags |`（Obsidian 双向链接，复盘在关系图谱中互相连接；INDEX.md 不存在则创建并加表头）
+   - frontmatter 的 `tags` 与复习计划 `- [ ]` 勾选框是 Obsidian 原生特性，无需额外处理
 
 ## 高价值问题识别
 
